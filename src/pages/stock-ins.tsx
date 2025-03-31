@@ -580,7 +580,7 @@ export default function StockInsPage() {
 
               <Form.Item className="flex-1 flex items-end">
                 <Button 
-                  type={selectedMedicine ? "primary" : "dashed"}
+                  type="dashed" 
                   icon={<PlusOutlined />} 
                   onClick={handleAddDetail}
                   disabled={!selectedMedicine}

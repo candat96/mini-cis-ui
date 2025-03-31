@@ -4,3 +4,59 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+/* Thu nhỏ khoảng cách các ô input của Ant Design */
+.ant-form-item {
+  margin-bottom: 12px !important;
+}
+
+.ant-form-item-label {
+  padding-bottom: 4px !important;
+}
+
+.ant-form-item-explain {
+  min-height: 18px !important;
+  font-size: 12px !important;
+}
+
+/* Thu nhỏ padding trong các card */
+.ant-card-body {
+  padding: 16px !important;
+}
+
+/* Thu nhỏ khoảng cách trong các modal */
+.ant-modal-body {
+  padding: 16px !important;
+}
+
+/* Thu nhỏ khoảng cách trong các form */
+.ant-form {
+  row-gap: 8px !important;
+}
+
+/* Thu nhỏ khoảng cách giữa các form item trong flex và grid */
+.gap-4 {
+  gap: 8px !important;
+}
+
+/* Thu nhỏ padding cho các input */
+.ant-input,
+.ant-picker,
+.ant-select-selector,
+.ant-input-number,
+.ant-input-affix-wrapper {
+  padding: 4px 8px !important;
+  min-height: 32px !important;
+}
+
+/* Thu nhỏ chiều cao các button */
+.ant-btn {
+  padding: 4px 12px !important;
+  height: 32px !important;
+}
+
+/* Thu nhỏ khoảng cách trong table */
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  padding: 8px !important;
+}

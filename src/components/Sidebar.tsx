@@ -91,6 +91,7 @@ const Sidebar = ({ collapsed = false, onCollapse }: SidebarProps) => {
     <Menu
       mode="inline"
       selectedKeys={[router.pathname]}
+      defaultOpenKeys={['service-management', 'medicine-management']}
       items={items}
       className="border-r-0"
       onClick={isMobile ? onDrawerClose : undefined}
