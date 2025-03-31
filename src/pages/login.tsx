@@ -1,0 +1,113 @@
+import { useState } from 'react';
+import Head from 'next/head';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { Card, Form, Input, Button, Typography, message, Divider } from 'antd';
+import { UserOutlined, LockOutlined, MedicineBoxOutlined } from '@ant-design/icons';
+import HttpClient from '../lib/axios';
+import { setStoreData } from '../lib/localStorage';
+
+interface LoginResponse {
+  accessToken: string;
+  user: {
+    id: string;
+    username: string;
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
+
+const { Title, Text } = Typography;
+
+export default function LoginPage() {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    try {
+      const response = await HttpClient.post<any, LoginResponse>('http://localhost:1551/api/auth/login', {
+        username: values.username,
+        password: values.password
+      });
+
+      // HttpClient already returns response.data from the interceptor
+      await setStoreData('token', response.accessToken);
+      await setStoreData('user', response);
+      
+      message.success('Đăng nhập thành công');
+      router.push('/dashboard');
+    } catch (error) {
+      message.error('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin');
+      console.error('Login error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    
+
+      <Card className="w-full max-w-md shadow-lg">
+        <div className="text-center mb-6">
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
+              <MedicineBoxOutlined style={{ fontSize: '32px', color: '#1890ff' }} />
+            </div>
+          </div>
+          <Title level={3} className="mb-0">Mini CIS</Title>
+          <Text type="secondary">Hệ thống quản lý phòng khám</Text>
+        </div>
+        
+        <Divider />
+        
+        <Form
+          name="login"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          layout="vertical"
+          size="large"
+        >
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
+          >
+            <Input
+              prefix={<UserOutlined className="text-gray-400" />}
+              placeholder="Tên đăng nhập"
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+          >
+            <Input.Password
+              prefix={<LockOutlined className="text-gray-400" />}
+              placeholder="Mật khẩu"
+            />
+          </Form.Item>
+
+          <Form.Item className="mb-2">
+            <Button 
+              type="primary" 
+              htmlType="submit" 
+              loading={loading}
+              block
+              className="h-12"
+            >
+              Đăng nhập
+            </Button>
+          </Form.Item>
+        </Form>
+        
+        <div className="text-center mt-4">
+          <Text type="secondary" className="text-xs">
+            © 2023 Mini CIS - Hệ thống quản lý phòng khám
+          </Text>
+        </div>
+      </Card>
+    </div>
+  );
+}
