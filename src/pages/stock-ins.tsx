@@ -284,7 +284,7 @@ export default function StockInsPage() {
   return (
     <AppLayout>
       <Head>
-        <title>Danh sách phiếu nhập kho - Mini CIS</title>
+        <title>Danh sách phiếu nhập kho - Tâm Đức</title>
       </Head>
       
       <div className="flex justify-between items-center mb-6">

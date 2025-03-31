@@ -111,7 +111,7 @@ const Sidebar = ({ collapsed = false, onCollapse }: SidebarProps) => {
   // Mobile drawer
   const mobileDrawer = isMobile && (
     <Drawer
-      title="Mini CIS"
+      title="Tâm Đức"
       placement="left"
       closable={true}
       onClose={onDrawerClose}
@@ -143,7 +143,7 @@ const Sidebar = ({ collapsed = false, onCollapse }: SidebarProps) => {
     >
       <div className="flex justify-center p-4">
         <h2 className={`text-primary text-xl font-bold transition-opacity ${collapsed ? 'opacity-0' : 'opacity-100'}`}>
-          Mini CIS
+          Tâm Đức
         </h2>
       </div>
       

@@ -130,7 +130,7 @@ export default function InventoryPage() {
   return (
     <AppLayout>
       <Head>
-        <title>Tồn kho thuốc - Mini CIS</title>
+        <title>Tồn kho thuốc - Tâm Đức</title>
       </Head>
       
       <div className="flex justify-between items-center mb-6">

@@ -30,7 +30,7 @@ export default function DashboardPage() {
   return (
     <AppLayout>
       <Head>
-        <title>Dashboard - Mini CIS</title>
+        <title>Dashboard - Tâm Đức</title>
       </Head>
       
       <div className="mb-6">

@@ -1,13 +1,7 @@
 import HttpClient from '../lib/axios';
+import type { ServiceCategory } from './serviceService';
 
-export interface ServiceCategory {
-  id: string;
-  name: string;
-  code: string;
-  note: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+
 
 export interface ServiceCategoryResponse {
   items: ServiceCategory[];

@@ -128,7 +128,7 @@ export default function ServiceCategoriesPage() {
   return (
     <AppLayout>
       <Head>
-        <title>Danh mục loại dịch vụ - Mini CIS</title>
+        <title>Danh mục loại dịch vụ - Tâm Đức</title>
       </Head>
       
       <div className="flex justify-between items-center mb-6">

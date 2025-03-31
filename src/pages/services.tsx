@@ -160,7 +160,7 @@ export default function ServicesPage() {
   return (
     <AppLayout>
       <Head>
-        <title>Danh mục dịch vụ - Mini CIS</title>
+        <title>Danh mục dịch vụ - Tâm Đức</title>
       </Head>
       
       <div className="flex justify-between items-center mb-6">

@@ -132,7 +132,7 @@ export default function PatientsPage() {
   return (
     <AppLayout>
       <Head>
-        <title>Danh sách bệnh nhân - Mini CIS</title>
+        <title>Danh sách bệnh nhân - Tâm Đức</title>
       </Head>
       
       <div className="flex justify-between items-center mb-6">

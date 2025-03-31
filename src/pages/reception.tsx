@@ -199,7 +199,7 @@ export default function ReceptionPage() {
   return (
     <AppLayout>
       <Head>
-        <title>Tiếp đón - Mini CIS</title>
+        <title>Tiếp đón - Tâm Đức</title>
       </Head>
       
       <div className="flex justify-between items-center mb-6">

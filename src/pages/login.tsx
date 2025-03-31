@@ -56,7 +56,7 @@ export default function LoginPage() {
               <MedicineBoxOutlined style={{ fontSize: '32px', color: '#1890ff' }} />
             </div>
           </div>
-          <Title level={3} className="mb-0">Mini CIS</Title>
+          <Title level={3} className="mb-0">Tâm Đức</Title>
           <Text type="secondary">Hệ thống quản lý phòng khám</Text>
         </div>
         
@@ -104,7 +104,7 @@ export default function LoginPage() {
         
         <div className="text-center mt-4">
           <Text type="secondary" className="text-xs">
-            © 2023 Mini CIS - Hệ thống quản lý phòng khám
+            © 2023 Tâm Đức - Hệ thống quản lý phòng khám
           </Text>
         </div>
       </Card>

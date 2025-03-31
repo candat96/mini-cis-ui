@@ -128,7 +128,7 @@ export default function MedicineCategoriesPage() {
   return (
     <AppLayout>
       <Head>
-        <title>Danh mục loại thuốc - Mini CIS</title>
+        <title>Danh mục loại thuốc - Tâm Đức</title>
       </Head>
       
       <div className="flex justify-between items-center mb-6">

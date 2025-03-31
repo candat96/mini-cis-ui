@@ -63,7 +63,7 @@ export default function ProfilePage() {
   return (
     <AppLayout>
       <Head>
-        <title>Thông tin cá nhân - Mini CIS</title>
+        <title>Thông tin cá nhân - Tâm Đức</title>
       </Head>
       
       <div className="mb-6">
