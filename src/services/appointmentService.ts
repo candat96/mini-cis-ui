@@ -20,7 +20,7 @@ export interface Appointment {
   doctorId: string;
   appointmentDate: string;
   note?: string;
-  status: 'PENDING' | 'COMPLETED' | 'CANCELLED';
+  status: 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
   totalAmount?: string;
   createdAt: string;
   updatedAt: string;
@@ -80,7 +80,7 @@ export interface AppointmentResponse {
 export interface AppointmentSearchParams {
   patientId?: string;
   doctorId?: string;
-  status?: 'PENDING' | 'COMPLETED' | 'CANCELLED';
+  status?: 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
   startDate?: string;
   endDate?: string;
   search?: string;
@@ -132,6 +132,15 @@ class AppointmentService {
       await HttpClient.delete(`${this.apiUrl}/${id}`);
     } catch (error) {
       console.error(`Error deleting appointment with ID ${id}:`, error);
+      throw error;
+    }
+  }
+
+  async updateAppointmentStatus(id: string, status: 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED'): Promise<Appointment> {
+    try {
+      return await HttpClient.patch(`${this.apiUrl}/${id}/status`, { status });
+    } catch (error) {
+      console.error(`Error updating appointment status with ID ${id}:`, error);
       throw error;
     }
   }

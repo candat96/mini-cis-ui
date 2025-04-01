@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Card, Form, Input, Button, Typography, message, Divider } from 'antd';
-import { UserOutlined, LockOutlined, MedicineBoxOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import HttpClient from '../lib/axios';
-import { setStoreData } from '../lib/localStorage';
+import { setStoreData, getStoreData } from '../lib/localStorage';
 
 interface LoginResponse {
   accessToken: string;
@@ -21,7 +21,22 @@ const { Title, Text } = Typography;
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
+  const [initializing, setInitializing] = useState(true);
   const router = useRouter();
+  
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = await getStoreData('token');
+      if (token) {
+        // User is already logged in, redirect to reception
+        router.replace('/reception');
+      }
+      setInitializing(false);
+    };
+    
+    checkAuth();
+  }, [router]);
 
   const onFinish = async (values: any) => {
     setLoading(true);
@@ -45,16 +60,28 @@ export default function LoginPage() {
     }
   };
 
+  // Show loading while checking authentication
+  if (initializing) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div>Đang tải...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-    
 
       <Card className="w-full max-w-md shadow-lg">
         <div className="text-center mb-6">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-              <MedicineBoxOutlined style={{ fontSize: '32px', color: '#1890ff' }} />
-            </div>
+            <Image 
+              src="/logo.png" 
+              alt="Tâm Đức Logo" 
+              width={120} 
+              height={120} 
+              priority 
+            />
           </div>
           <Title level={3} className="mb-0">Tâm Đức</Title>
           <Text type="secondary">Hệ thống quản lý phòng khám</Text>

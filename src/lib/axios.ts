@@ -125,6 +125,15 @@ class Axios {
     return this.Instance.delete<T, R>(url, config);
   }
 
+  public patch<T = any, R = T>(
+    url: string,
+    data?: T,
+    config?: AxiosRequestConfig,
+  ): Promise<R> {
+    this.useInterceptor();
+    return this.Instance.patch<T, R>(url, data, config);
+  }
+
   public pull<T = any, R = T>(
     url: string,
     data?: T,

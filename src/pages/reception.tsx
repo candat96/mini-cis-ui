@@ -39,7 +39,8 @@ export default function ReceptionPage() {
     handleSearch, 
     resetSearch,
     createAppointment,
-    updateAppointment
+    updateAppointment,
+    updateAppointmentStatus
   } = useAppointments();
 
   // Hook để lấy danh sách dịch vụ cho dropdown
@@ -99,6 +100,26 @@ export default function ReceptionPage() {
         searchParams.search
       );
     }
+  };
+
+  // Xử lý cập nhật trạng thái lịch khám
+  const handleUpdateStatus = async (id: string, currentStatus: string) => {
+    let newStatus: 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
+    
+    if (currentStatus === 'PENDING') {
+      newStatus = 'CONFIRMED';
+    } else if (currentStatus === 'CONFIRMED') {
+      newStatus = 'COMPLETED';
+    } else {
+      return; // Không xử lý nếu trạng thái đã là COMPLETED hoặc CANCELLED
+    }
+    
+    await updateAppointmentStatus(id, newStatus);
+  };
+
+  // Xử lý hủy lịch khám
+  const handleCancelAppointment = async (id: string) => {
+    await updateAppointmentStatus(id, 'CANCELLED');
   };
 
   // Định nghĩa các cột cho bảng hiển thị lịch khám
@@ -164,6 +185,10 @@ export default function ReceptionPage() {
           color = 'red';
           text = 'Đã hủy';
           icon = <CloseCircleOutlined />;
+        } else if (status === 'CONFIRMED') {
+          color = 'geekblue';
+          text = 'Đã xác nhận';
+          icon = <CheckCircleOutlined />;
         }
         
         return (
@@ -182,6 +207,7 @@ export default function ReceptionPage() {
     {
       title: 'Thao tác',
       key: 'action',
+      width: 250,
       render: (_: any, record: Appointment) => (
         <Space>
           <Button 
@@ -191,6 +217,27 @@ export default function ReceptionPage() {
           >
             Chi tiết
           </Button>
+          
+          {record.status !== 'COMPLETED' && record.status !== 'CANCELLED' && (
+            <Button 
+              size="small" 
+              type={record.status === 'PENDING' ? 'primary' : 'default'}
+              style={record.status === 'CONFIRMED' ? { backgroundColor: '#52c41a', color: 'white' } : {}}
+              onClick={() => handleUpdateStatus(record.id, record.status)}
+            >
+              {record.status === 'PENDING' ? 'Xác nhận' : 'Hoàn thành'}
+            </Button>
+          )}
+          
+          {record.status !== 'CANCELLED' && record.status !== 'COMPLETED' && (
+            <Button 
+              size="small" 
+              danger
+              onClick={() => handleCancelAppointment(record.id)}
+            >
+              Hủy
+            </Button>
+          )}
         </Space>
       ),
     },
@@ -220,7 +267,7 @@ export default function ReceptionPage() {
           <Input
             placeholder="Tìm kiếm bệnh nhân"
             prefix={<SearchOutlined />}
-            style={{ width: 200 }}
+            style={{ width: 200, height:40 }}
             value={searchParams.search}
             onChange={e => handleSearch(
               searchParams.patientId,
@@ -233,25 +280,28 @@ export default function ReceptionPage() {
             allowClear
           />
           <RangePicker 
-            style={{ width: 300 }} 
+            style={{ width: 300 , height:40}} 
             onChange={handleDateRangeChange}
             defaultValue={[dayjs().startOf('day'), dayjs().endOf('day')]}
+            format="DD/MM/YYYY"
           />
           <Select
             placeholder="Trạng thái"
-            style={{ width: 150 }}
-            value={searchParams.status || undefined}
-            onChange={value => handleSearch(
+            style={{ width: 150 , height: 40}}
+            value={searchParams.status || 'ALL'}
+            onChange={(value: 'ALL' | 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED' | undefined) => handleSearch(
               searchParams.patientId,
               searchParams.doctorId,
-              value,
+              value === 'ALL' ? undefined : value as 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED' | undefined,
               searchParams.search,
               searchParams.startDate,
               searchParams.endDate
             )}
             allowClear
           >
+            <Option value="ALL">Tất cả</Option>
             <Option value="PENDING">Chờ khám</Option>
+            <Option value="CONFIRMED">Đã xác nhận</Option>
             <Option value="COMPLETED">Đã khám</Option>
             <Option value="CANCELLED">Đã hủy</Option>
           </Select>
@@ -262,10 +312,10 @@ export default function ReceptionPage() {
             searchParams.search,
             searchParams.startDate,
             searchParams.endDate
-          )}>
+          )} className='h-[40px]'>
             Tìm kiếm
           </Button>
-          <Button onClick={resetSearch}>Đặt lại</Button>
+          <Button onClick={resetSearch} style={{height:40}}>Đặt lại</Button>
         </div>
         
         <Table 

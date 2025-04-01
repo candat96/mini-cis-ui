@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Layout, Menu, Button, Drawer } from 'antd';
 import type { MenuProps } from 'antd';
 import {
@@ -111,7 +112,12 @@ const Sidebar = ({ collapsed = false, onCollapse }: SidebarProps) => {
   // Mobile drawer
   const mobileDrawer = isMobile && (
     <Drawer
-      title="Tâm Đức"
+      title={
+        <div className="flex items-center gap-2">
+          <Image src="/logo.png" alt="Tâm Đức Logo" width={30} height={30} />
+          <span>Tâm Đức</span>
+        </div>
+      }
       placement="left"
       closable={true}
       onClose={onDrawerClose}
@@ -141,7 +147,8 @@ const Sidebar = ({ collapsed = false, onCollapse }: SidebarProps) => {
       }}
       trigger={null}
     >
-      <div className="flex justify-center p-4">
+      <div className="flex justify-center items-center p-4">
+        {!collapsed && <Image src="/logo.png" alt="Tâm Đức Logo" width={30} height={30} className="mr-2" />}
         <h2 className={`text-primary text-xl font-bold transition-opacity ${collapsed ? 'opacity-0' : 'opacity-100'}`}>
           Tâm Đức
         </h2>

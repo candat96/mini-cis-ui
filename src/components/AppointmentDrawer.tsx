@@ -441,10 +441,9 @@ const AppointmentDrawer: React.FC<AppointmentDrawerProps> = ({
       width={'calc(100vw - 200px)'}
       onClose={handleClose}
       open={visible}
-      bodyStyle={{ paddingBottom: 80 }}
       extra={
         <Space>
-          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={handleClose} color="danger">Hủy</Button>
           <Button type="primary" onClick={handleSubmit} loading={submitting || creatingPatient}>
             {editingAppointment ? "Cập nhật" : "Tạo lịch khám"}
           </Button>
@@ -602,14 +601,6 @@ const AppointmentDrawer: React.FC<AppointmentDrawerProps> = ({
         <div className="bg-gray-50 p-4 rounded mb-4">
           <div className="flex justify-between items-center mb-2">
             <Title level={5}>Thêm dịch vụ</Title>
-            <div>
-              <Statistic 
-                title="Tổng tiền"
-                value={totalAmount}
-                formatter={(value) => formatCurrency(value || 0)}
-                className="text-right"
-              />
-            </div>
           </div>
           
           <div className="flex gap-4">
@@ -655,9 +646,10 @@ const AppointmentDrawer: React.FC<AppointmentDrawerProps> = ({
             
             <Form.Item className="flex-none">
               <Button 
-                type="dashed" 
+                type="primary" 
                 onClick={handleAddService}
                 icon={<PlusOutlined />}
+                className='mt-[26px]'
               >
                 Thêm
               </Button>

@@ -10,7 +10,6 @@ export function useAppointments() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchParams, setSearchParams] = useState<AppointmentSearchParams>({
-    status: 'PENDING',
     startDate: dayjs().startOf('day').toISOString(),
     endDate: dayjs().endOf('day').toISOString(),
     page: 1,
@@ -60,7 +59,7 @@ export function useAppointments() {
   const handleSearch = (
     patientId?: string,
     doctorId?: string,
-    status?: 'PENDING' | 'COMPLETED' | 'CANCELLED',
+    status?: 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED',
     search?: string,
     startDate?: string,
     endDate?: string
@@ -81,7 +80,6 @@ export function useAppointments() {
 
   const resetSearch = () => {
     const defaultParams: AppointmentSearchParams = {
-      status: 'PENDING',
       startDate: dayjs().startOf('day').toISOString(),
       endDate: dayjs().endOf('day').toISOString(),
       page: 1,
@@ -139,6 +137,32 @@ export function useAppointments() {
     }
   };
 
+  const updateAppointmentStatus = async (id: string, status: 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED'): Promise<boolean> => {
+    setLoading(true);
+    try {
+      await appointmentService.updateAppointmentStatus(id, status);
+      
+      let successMessage = 'Cập nhật trạng thái lịch khám thành công';
+      if (status === 'CONFIRMED') {
+        successMessage = 'Đã xác nhận lịch khám';
+      } else if (status === 'COMPLETED') {
+        successMessage = 'Đã hoàn thành lịch khám';
+      } else if (status === 'CANCELLED') {
+        successMessage = 'Đã hủy lịch khám';
+      }
+      
+      message.success(successMessage);
+      fetchAppointments();
+      return true;
+    } catch (error) {
+      console.error('Error updating appointment status:', error);
+      message.error('Không thể cập nhật trạng thái lịch khám. Vui lòng thử lại sau.');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     appointments,
     loading,
@@ -151,6 +175,7 @@ export function useAppointments() {
     resetSearch,
     createAppointment,
     updateAppointment,
-    deleteAppointment
+    deleteAppointment,
+    updateAppointmentStatus
   };
 } 
