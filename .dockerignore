@@ -1,0 +1,12 @@
+**/node_modules
+**/.next
+**/out
+**/.git
+**/.github
+**/.vscode
+**/npm-debug.log
+**/README.md
+**/LICENSE
+**/Dockerfile
+**/.dockerignore
+**/docker-compose* 

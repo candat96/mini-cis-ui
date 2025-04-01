@@ -5,14 +5,20 @@ import {
   SearchOutlined, 
   PlusOutlined,
   CheckCircleOutlined,
-  CloseCircleOutlined
+  CloseCircleOutlined,
+  MedicineBoxOutlined
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import AppLayout from '../components/AppLayout';
 import { useAppointments } from '../hooks/useAppointments';
 import { useServices } from '../hooks/useServices';
+import { useMedicines } from '../hooks/useMedicines';
+import { usePrescriptions } from '../hooks/usePrescriptions';
 import type { Appointment, AppointmentRequest } from '../services/appointmentService';
+import type { Prescription, PrescriptionRequest } from '../services/prescriptionService';
 import AppointmentDrawer from '../components/AppointmentDrawer';
+import PrescriptionModal from '../components/PrescriptionModal';
+import { useDoctors } from '../hooks/useDoctors';
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -26,6 +32,9 @@ const formatDateTime = (dateString: string): string => {
 export default function ReceptionPage() {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null);
+  const [prescriptionModalVisible, setPrescriptionModalVisible] = useState(false);
+  const [currentAppointment, setCurrentAppointment] = useState<Appointment | null>(null);
+  const [currentPrescription, setCurrentPrescription] = useState<Prescription | null>(null);
   
   // Sử dụng custom hook để quản lý lịch khám
   const { 
@@ -45,6 +54,15 @@ export default function ReceptionPage() {
 
   // Hook để lấy danh sách dịch vụ cho dropdown
   const { services: serviceOptions, loading: loadingServices } = useServices();
+  
+  // Hook để lấy danh sách thuốc cho đơn thuốc
+  const { medicines, loading: loadingMedicines } = useMedicines();
+  
+  // Hook để lấy danh sách đơn thuốc
+  const { createPrescription, updatePrescription } = usePrescriptions();
+  
+  // Hook để lấy thông tin bác sĩ
+  const { doctors, loading: loadingDoctors } = useDoctors();
 
   // Xử lý hiển thị drawer tạo lịch khám
   const showDrawer = (appointment?: Appointment) => {
@@ -120,6 +138,45 @@ export default function ReceptionPage() {
   // Xử lý hủy lịch khám
   const handleCancelAppointment = async (id: string) => {
     await updateAppointmentStatus(id, 'CANCELLED');
+  };
+
+  // Xử lý hiển thị modal kê đơn thuốc
+  const showPrescriptionModal = (appointment: Appointment) => {
+    setCurrentAppointment(appointment);
+    setCurrentPrescription(null);
+    setPrescriptionModalVisible(true);
+  };
+
+  // Xử lý đóng modal kê đơn thuốc
+  const handlePrescriptionModalClose = () => {
+    setPrescriptionModalVisible(false);
+    setCurrentAppointment(null);
+    setCurrentPrescription(null);
+  };
+
+  // Xử lý tạo hoặc cập nhật đơn thuốc
+  const handleSubmitPrescription = async (prescriptionData: PrescriptionRequest): Promise<boolean> => {
+    let success;
+    
+    // Lấy ID bác sĩ từ appointment nếu không có trong prescriptionData
+    const doctorId = prescriptionData.doctorId || currentAppointment?.doctorId || '';
+    
+    if (currentPrescription) {
+      // Cập nhật đơn thuốc hiện có
+      success = await updatePrescription(currentPrescription.id, {
+        ...prescriptionData,
+        doctorId
+      });
+    } else {
+      // Tạo đơn thuốc mới
+      success = await createPrescription({
+        ...prescriptionData,
+        appointmentId: currentAppointment?.id || '',
+        doctorId
+      });
+    }
+    
+    return success;
   };
 
   // Định nghĩa các cột cho bảng hiển thị lịch khám
@@ -207,7 +264,7 @@ export default function ReceptionPage() {
     {
       title: 'Thao tác',
       key: 'action',
-      width: 250,
+      width: 350,
       render: (_: any, record: Appointment) => (
         <Space>
           <Button 
@@ -236,6 +293,16 @@ export default function ReceptionPage() {
               onClick={() => handleCancelAppointment(record.id)}
             >
               Hủy
+            </Button>
+          )}
+          
+          {record.status === 'CONFIRMED' && (
+            <Button
+              size="small"
+              icon={<MedicineBoxOutlined />}
+              onClick={() => showPrescriptionModal(record)}
+            >
+              Kê đơn
             </Button>
           )}
         </Space>
@@ -347,6 +414,19 @@ export default function ReceptionPage() {
         onSubmit={handleSubmitAppointment}
         serviceOptions={serviceOptions}
         loadingServices={loadingServices}
+        onPrescribe={showPrescriptionModal}
+      />
+      
+      {/* Modal kê đơn thuốc */}
+      <PrescriptionModal
+        visible={prescriptionModalVisible}
+        onCancel={handlePrescriptionModalClose}
+        onSubmit={handleSubmitPrescription}
+        prescription={currentPrescription || undefined}
+        appointmentId={currentAppointment?.id || ''}
+        doctorId={currentAppointment?.doctorId || ''}
+        medicines={medicines}
+        loading={loadingMedicines}
       />
     </AppLayout>
   );

@@ -7,4 +7,6 @@ export * from './useMedicineCategoryOptions';
 export * from './useStockIns';
 export * from './useInventories';
 export * from './useAppointments';
-export * from './usePatients'; 
+export * from './usePatients';
+export * from './usePrescriptions';
+export * from './useDoctors'; 

@@ -82,6 +82,7 @@ const Sidebar = ({ collapsed = false, onCollapse }: SidebarProps) => {
       getItem(<Link href="/medicines">Danh mục thuốc</Link>, '/medicines'),
       getItem(<Link href="/stock-ins">Phiếu nhập kho</Link>, '/stock-ins'),
       getItem(<Link href="/inventory">Tồn kho thuốc</Link>, '/inventory'),
+      getItem(<Link href="/prescriptions">Danh sách đơn thuốc</Link>, '/prescriptions'),
     ]),
     getItem(<Link href="/patients">Danh sách bệnh nhân</Link>, '/patients', <TeamOutlined />),
     getItem(<Link href="/profile">Thông tin cá nhân</Link>, '/profile', <UserOutlined />),

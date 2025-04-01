@@ -17,6 +17,9 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  
+  // Thêm cấu hình output standalone để sử dụng trong Dockerfile
+  output: 'standalone',
 };
 
 export default config;

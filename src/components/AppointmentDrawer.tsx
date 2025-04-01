@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Drawer, Form, Button, Input, Select, DatePicker, TimePicker, Space, Table, message, Card, Statistic } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, MedicineBoxOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { Typography } from 'antd';
 import type { Patient, PatientRequest } from '../services/patientService';
@@ -30,6 +30,7 @@ interface AppointmentDrawerProps {
   onSubmit: (appointment: AppointmentRequest, id?: string) => Promise<boolean>;
   serviceOptions: any[];
   loadingServices: boolean;
+  onPrescribe?: (appointment: Appointment) => void;
 }
 
 interface ServiceWithPrice extends AppointmentServiceItem {
@@ -44,7 +45,8 @@ const AppointmentDrawer: React.FC<AppointmentDrawerProps> = ({
   onClose, 
   onSubmit,
   serviceOptions,
-  loadingServices
+  loadingServices,
+  onPrescribe
 }) => {
   const [form] = Form.useForm();
   const [services, setServices] = useState<ServiceWithPrice[]>([]);
@@ -444,6 +446,15 @@ const AppointmentDrawer: React.FC<AppointmentDrawerProps> = ({
       extra={
         <Space>
           <Button onClick={handleClose} color="danger">Hủy</Button>
+          {editingAppointment && editingAppointment.status === 'CONFIRMED' && onPrescribe && (
+            <Button 
+              type="default" 
+              icon={<MedicineBoxOutlined />} 
+              onClick={() => onPrescribe(editingAppointment)}
+            >
+              Kê đơn thuốc
+            </Button>
+          )}
           <Button type="primary" onClick={handleSubmit} loading={submitting || creatingPatient}>
             {editingAppointment ? "Cập nhật" : "Tạo lịch khám"}
           </Button>

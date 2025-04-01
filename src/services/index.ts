@@ -6,4 +6,5 @@ export * from './stockInService';
 export * from './inventoryService';
 export * from './appointmentService';
 export * from './patientService';
-export * from './doctorService'; 
+export * from './doctorService';
+export * from './prescriptionService'; 
