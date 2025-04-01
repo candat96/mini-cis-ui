@@ -41,7 +41,7 @@ export default function LoginPage() {
   const onFinish = async (values: any) => {
     setLoading(true);
     try {
-      const response = await HttpClient.post<any, LoginResponse>('http://localhost:1551/api/auth/login', {
+      const response = await HttpClient.post<any, LoginResponse>('http://103.163.215.106:1551/api/auth/login', {
         username: values.username,
         password: values.password
       });
