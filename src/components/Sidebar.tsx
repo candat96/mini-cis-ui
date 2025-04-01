@@ -85,6 +85,12 @@ const Sidebar = ({ collapsed = false, onCollapse }: SidebarProps) => {
       getItem(<Link href="/prescriptions">Danh sách đơn thuốc</Link>, '/prescriptions'),
     ]),
     getItem(<Link href="/patients">Danh sách bệnh nhân</Link>, '/patients', <TeamOutlined />),
+    getItem('Báo cáo', 'reports', <AppstoreOutlined />, [
+      getItem(<Link href="/reports/total-revenue">Báo cáo doanh thu tổng hợp</Link>, '/reports/total-revenue'),
+      getItem(<Link href="/reports/doctor-revenue">Báo cáo doanh thu theo bác sĩ</Link>, '/reports/doctor-revenue'),
+      getItem(<Link href="/reports/doctor-service-revenue">Báo cáo doanh thu dịch vụ theo bác sĩ</Link>, '/reports/doctor-service-revenue'),
+      getItem(<Link href="/reports/doctor-medicine-revenue">Báo cáo doanh thu thuốc theo bác sĩ</Link>, '/reports/doctor-medicine-revenue'),
+    ]),
     getItem(<Link href="/profile">Thông tin cá nhân</Link>, '/profile', <UserOutlined />),
   ];
 
@@ -93,7 +99,7 @@ const Sidebar = ({ collapsed = false, onCollapse }: SidebarProps) => {
     <Menu
       mode="inline"
       selectedKeys={[router.pathname]}
-      defaultOpenKeys={['service-management', 'medicine-management']}
+      defaultOpenKeys={['service-management', 'medicine-management', 'reports']}
       items={items}
       className="border-r-0"
       onClick={isMobile ? onDrawerClose : undefined}

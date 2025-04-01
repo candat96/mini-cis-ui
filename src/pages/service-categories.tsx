@@ -9,7 +9,8 @@ import {
 } from '@ant-design/icons';
 import AppLayout from '../components/AppLayout';
 import { useServiceCategories } from '../hooks/useServiceCategories';
-import type { ServiceCategory, ServiceCategoryRequest } from '../services/serviceCategoryService';
+import type { ServiceCategoryRequest } from '../services/serviceCategoryService';
+import type { ServiceCategory } from '~/services';
 
 const { Title, Paragraph } = Typography;
 

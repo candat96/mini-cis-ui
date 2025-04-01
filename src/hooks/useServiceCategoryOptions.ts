@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { message } from 'antd';
-import type { ServiceCategory } from '../services/serviceCategoryService';
 import { ServiceCategoryService } from '../services/serviceCategoryService';
+import type { ServiceCategory } from '~/services';
 
 export function useServiceCategoryOptions() {
   const [categories, setCategories] = useState<ServiceCategory[]>([]);

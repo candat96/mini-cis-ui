@@ -1,37 +1,38 @@
-FROM node:18-alpine AS base
+# Sử dụng image node chính thức
+FROM node:20-alpine AS builder
 
-# Cài đặt các phụ thuộc
-FROM base AS deps
+# Đặt thư mục làm việc
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-RUN npm ci
+# Sao chép package.json và yarn.lock vào container
+COPY package.json yarn.lock ./
 
-# Xây dựng ứng dụng
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Cài đặt các dependencies
+RUN yarn install --frozen-lockfile --network-timeout 600000
+
+# Sao chép tất cả các tệp của dự án vào container
 COPY . .
 
-RUN npm run build
+# Build ứng dụng Next.js
+RUN yarn build
 
-# Chạy ứng dụng
-FROM base AS runner
+# Dùng image nhỏ hơn để chạy ứng dụng sau khi build
+FROM node:20-alpine AS runner
+
+# Đặt biến môi trường NODE_ENV là 'production'
+ENV NODE_ENV=production
+
+# Thiết lập thư mục làm việc
 WORKDIR /app
 
-ENV NODE_ENV production
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
+# Sao chép các tệp cần thiết từ quá trình build trước
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
-USER nextjs
+# Lắng nghe trên cổng 3030
+EXPOSE 3030
 
-EXPOSE 3000
-
-ENV PORT 3000
-
-CMD ["node", "server.js"] 
+# Lệnh chạy ứng dụng Next.js
+CMD ["yarn", "start"]

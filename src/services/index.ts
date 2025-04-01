@@ -7,4 +7,5 @@ export * from './inventoryService';
 export * from './appointmentService';
 export * from './patientService';
 export * from './doctorService';
-export * from './prescriptionService'; 
+export * from './prescriptionService';
+export * from './reportService'; 
