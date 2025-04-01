@@ -20,7 +20,7 @@ class Axios {
 
   constructor() {
     const instance = axios.create({
-      baseURL: 'http://103.163.215.106:1551',
+      baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
       headers,
       timeout,
     });
